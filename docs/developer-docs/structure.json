@@ -48,13 +48,6 @@
       ]
     },
     {
-      "label": "Tools & SDK",
-      "pages": [
-        "auth-tool-playground",
-        "sdks-and-utilities"
-      ]
-    },
-    {
       "label": "Reference",
       "pages": [
         "api-reference",
