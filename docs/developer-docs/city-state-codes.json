@@ -1,5 +1,6 @@
 {
   "label": "City & State Codes",
   "short_description": "ONDC city (STD) codes and state codes",
-  "description": ""
+  "description": "",
+  "group": "Reference"
 }

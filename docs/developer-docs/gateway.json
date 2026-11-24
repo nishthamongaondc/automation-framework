@@ -1,0 +1,6 @@
+{
+  "label": "Gateway",
+  "short_description": "The Beckn Gateway (BG) — the search multicast router that fans out one /search to relevant sellers, after which on_search and everything else is peer-to-peer.",
+  "group": "ONDC Infra",
+  "subgroup": "Core Infra"
+}

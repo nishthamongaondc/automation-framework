@@ -1,0 +1,5 @@
+{
+  "label": "Auth Tool Playground",
+  "short_description": "Interactive tool to generate and verify ONDC Ed25519 signatures and build the Authorization header before you wire signing into your stack.",
+  "group": "Tools & SDK"
+}

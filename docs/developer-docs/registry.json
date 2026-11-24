@@ -1,0 +1,6 @@
+{
+  "label": "Registry",
+  "short_description": "The ONDC Registry — the network's trust and identity layer that stores subscriber records and public keys, resolved via lookup.",
+  "group": "ONDC Infra",
+  "subgroup": "Core Infra"
+}

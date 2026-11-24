@@ -1,4 +1,5 @@
 {
-  "label": "About ONDC",
-  "short_description": "what is ondc for a developer"
+  "label": "What ONDC Is",
+  "short_description": "What the Open Network for Digital Commerce is, and how an open network differs from closed e-commerce platforms.",
+  "group": "About ONDC"
 }

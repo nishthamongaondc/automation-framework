@@ -1,0 +1,5 @@
+{
+  "label": "Subscription",
+  "short_description": "Registering a Network Participant on the ONDC Registry: key generation, the subscription APIs, encryption key exchange, and DNS validation.",
+  "group": "Protocol"
+}

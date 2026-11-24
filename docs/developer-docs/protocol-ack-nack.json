@@ -1,0 +1,5 @@
+{
+  "label": "ACK / NACK",
+  "short_description": "Acknowledgement semantics, when a NACK is returned, and how errors surface on the synchronous response or the callback.",
+  "group": "Protocol"
+}

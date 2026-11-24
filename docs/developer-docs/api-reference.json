@@ -1,5 +1,6 @@
 {
   "label": "API Reference",
   "short_description": "Every ONDC API endpoint, the request envelope, context fields and message structure",
-  "description": ""
+  "description": "",
+  "group": "Reference"
 }

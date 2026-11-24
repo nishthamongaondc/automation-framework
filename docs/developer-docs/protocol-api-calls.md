@@ -1,14 +1,8 @@
-# The Protocol
+# API Calls
 
-**[Beckn](https://www.youtube.com/watch?v=gefmygtzZR8&t=1s)** is an open protocol that allows local businesses across any industry to be discovered and engaged by any beckn-enabled application. **Beckn protocol** is a collection of open specifications consisting of protocol APIs, message formats, network design and reference architectures to allow any two entities to execute commercial transactions without being on the same platform.
+## The two-layer model
 
-**ONDC** has provided the network extension layer over the Beckn Protocol (base layer). Over the base layer, the network extension layer comprises **model specifications** customised to the ONDC context that have been adopted in order to facilitate transactions over the network. For a detailed understanding of the ONDC network architecture, please refer to our [Video](https://drive.google.com/file/d/1WuHCc59C45LClpbiIPomPMuTeClRZw7h/view).
-
-### Protocol Architecture
-
-#### The Two-Layer Model
-
-ONDC's protocol is structured as two distinct layers:
+ONDC's protocol is structured as two distinct layers: an open base layer (Beckn) and an ONDC network extension on top of it.
 
 ```mermaid
 block-beta
@@ -33,34 +27,13 @@ block-beta
     style bTitle fill:none,stroke:none
 ```
 
-#### Beckn Protocol — The Base Layer
+**Beckn — the base layer.** [Beckn](https://becknprotocol.io/) is an open-source, domain-agnostic protocol for decentralized commerce. It defines the **Core APIs** (transaction APIs modeled after the order lifecycle — `search`, `select`, `init`, `confirm`, `status`, `track`, `update`, `cancel` — and their callbacks `on_search`, `on_select`, etc., plus supporting APIs like `rating` and `support`), the **Core Schema** (the data model: `Order`, `Item`, `Provider`, `Fulfillment`, `Payment`, `Billing`, …), the **Communication Protocol** (how APIs are called — async, server-to-server, ACK-based), **Authentication** (how participants sign and verify messages) and a **Domain Taxonomy** for industry-specific attributes. Beckn is transport-layer-agnostic; HTTP is the common implementation but not mandated.
 
-[Beckn](https://becknprotocol.io/) is an open-source, domain-agnostic protocol for decentralized commerce. It defines:
-
-- **Core APIs** — Transaction APIs modeled after the order lifecycle (`search`, `select`, `init`, `confirm`, `status`, `track`, `update`, `cancel`) and their corresponding callbacks (`on_search`, `on_select`, etc.). There are also Supporting APIs for non-transactional operations like `rating` and `support`.
-- **Core Schema** — The data model for commerce interactions, specified using OpenAPI 3.x. Defines objects like `Order`, `Item`, `Provider`, `Fulfillment`, `Payment`, `Billing`, etc.
-- **Communication Protocol** — The rules governing how APIs are called (async, server-to-server, ACK-based).
-- **Authentication** — How participants digitally sign and verify messages.
-- **Domain Taxonomy** — A mechanism for adding industry-specific attributes to the core schema.
-
-Beckn is **transport-layer-agnostic**. While HTTP is the most common implementation, the protocol itself doesn't mandate it.
-
-#### ONDC Network Extension — The Upper Layer
-
-ONDC builds on top of Beckn by adding:
-
-- **Domain-specific API contracts** — Customized schemas and flows for retail, logistics, mobility, financial services, etc.
-- **Network policies** — Rules around settlement, grievance management, compliance.
-- **IGM (Issue & Grievance Management)** — APIs for raising and resolving issues (`issue`, `on_issue`, `issue_status`, `on_issue_status`).
-- **RSF (Reconciliation & Settlement Framework)** — APIs for financial reconciliation between NPs (`recon`, `on_recon`, `settle`, `on_settle`).
-- **Network Observability (NO)** — A framework for pushing transaction logs to ONDC for monitoring network health.
-- **Registry infrastructure** — ONDC-specific onboarding, environment management, and key exchange.
+**ONDC network extension — the upper layer.** ONDC adds domain-specific API contracts (retail, logistics, mobility, financial services, …), network policies, **IGM** (`issue`, `on_issue`, `issue_status`, `on_issue_status`), **RSF** (`recon`, `on_recon`, `settle`, `on_settle`), **Network Observability**, and Registry infrastructure for onboarding and key exchange.
 
 See [API Reference](/developer-guide/docs/api-reference) for every API endpoint and its payload.
 
-### How a Transaction Works
-
-#### The Ground Rules
+## The request–callback model
 
 Every transaction on ONDC follows the same rules, whatever the domain:
 
@@ -70,7 +43,9 @@ Every transaction on ONDC follows the same rules, whatever the domain:
 - **Tracked:** every call carries a `context` with the same `transaction_id` for the whole transaction, and a `message_id` that links each request to its callback.
 - **Logged:** both apps push every request and response to ONDC's [Network Observability](/developer-guide/docs/network-observability) service.
 
-#### The Transaction at a Glance
+The immediate `ACK`/`NACK` is **synchronous**; the `on_action` callback is **asynchronous**. For what the acknowledgement means and when a `NACK` is returned, see **ACK / NACK**.
+
+## The transaction at a glance
 
 Every transaction moves through the same stages. Each box is a request and its callback.
 
@@ -99,7 +74,7 @@ flowchart LR
     style P fill:#0081cc14,stroke:#0081cc,stroke-width:1.5px
 ```
 
-#### One Order, Start to Finish
+## One order, start to finish
 
 The walk-through below follows one Grocery order (`ONDC:RET10`), from search to delivery. Other domains use the same pattern, with their own steps and states; the use case's **API Walkthrough** under Explore by Domain shows the exact flow for each.
 
@@ -129,7 +104,7 @@ The walk-through below follows one Grocery order (`ONDC:RET10`), from search to 
 
 **Step 10 — Settlement.** The app that collected the payment settles with the other according to the terms agreed in `on_init`. Where the Reconciliation and Settlement Framework applies, the apps reconcile with `recon` → `on_recon`.
 
-#### The Whole Flow
+## The whole flow
 
 The diagram shows every call from `search` to the last `on_status` of one order, with the synchronous `ACK` for each. Solid arrows are requests and callbacks; dashed arrows are the `ACK` responses.
 
@@ -187,11 +162,11 @@ sequenceDiagram
 ```
 
 - Every request and callback is signed with an `Authorization` header and carries the same `transaction_id`.
-- A request and its callback share a `message_id` (for example `select` and `on_select`, or `status` and the `on_status` that answers it). Each unsolicited `on_status` has a new one.
+- A request and its callback share a `message_id` (for example `status` and the `on_status` that answers it). Each unsolicited `on_status` has a new one. See **Message & Transaction ID**.
 - The Gateway takes part only in `search`. Every call after `on_search` goes directly between the two apps.
 - The other post-order calls (`track`, `update`, `cancel`, `rating`, `support`, `issue`) follow the same request, `ACK`, callback pattern.
 
-#### Order and Fulfillment States
+## Order and Fulfillment States
 
 An order has two states that move together: the **order** state (`order.state`) and the state of each **fulfillment** (`fulfillments[].state.descriptor.code`). The diagrams show them for a delivery order in Retail (`ONDC:RET10` 1.2.5); other domains use their own values, listed in each use case's API Walkthrough.
 
@@ -260,132 +235,4 @@ stateDiagram-v2
 | Delivered | `on_status` | `Completed` | `Order-delivered` |
 | Cancelled | `on_cancel`, then `on_status` | `Cancelled` | `Cancelled`; after pickup, `RTO-Initiated` → `RTO-Delivered` or `RTO-Disposed` (return to origin) |
 
-#### Identifiers Through the Transaction
-
-```mermaid
-flowchart LR
-    subgraph T["<b>transaction_id T1</b>: the same in every call of the order"]
-        direction LR
-        M1["<b>message_id m1</b><br/>search<br/>on_search × many"] --> M2["<b>m2</b><br/>select<br/>on_select"] --> M3["<b>m3</b><br/>init<br/>on_init"] --> M4["<b>m4</b><br/>confirm<br/>on_confirm<br/><small>order.id set</small>"] --> M5["<b>m5</b><br/>on_status<br/><small>unsolicited</small>"] --> M6["<b>m6</b><br/>status<br/>on_status"]
-    end
-    style T fill:#0081cc0f,stroke:#0081cc,stroke-width:1.5px
-    classDef unsol fill:#f59e0b1a,stroke:#f59e0b,stroke-width:1.5px
-    class M5 unsol
-```
-
-A request and its callback share one `message_id`; an unsolicited callback gets its own. `bpp_id` and `bpp_uri` are known from `on_search` onwards.
-
-| Identifier | Created by | Stays the same |
-| --- | --- | --- |
-| `transaction_id` | BAP, on `search` | In every call of the transaction, from `search` to the last post-order call. |
-| `message_id` | The sender of each request | Between a request and its callback (`select` and `on_select`). Each unsolicited `on_status`, `on_update` or `on_cancel` has a new one. |
-| `bpp_id`, `bpp_uri` | BPP, in `on_search` | In every call with that seller app after `on_search`. |
-| Order ID | Set in `confirm` | In every post-order call, as `order.id` or `order_id`. |
-
-#### When Something Goes Wrong
-
-| Situation | What Happens |
-| --- | --- |
-| The request is invalid (bad signature, wrong `context`, schema error) | The receiver answers `NACK` with an `error`. There is **no** callback; the sender must fix the request and send it again with a new `message_id`. |
-| The request is valid, but cannot be fulfilled (for example, an item is out of stock) | The receiver answers `ACK`, then sends the callback with an `error` (for example `on_select` with a domain error code). |
-| No callback arrives within the request's `ttl` | The sender treats the request as timed out. |
-
-```mermaid
-flowchart LR
-    S["Request arrives"] --> V{"Signature, context<br/>and schema valid?"}
-    V -- "no" --> N(["<b>NACK</b> with error<br/><small>no callback: fix the request and<br/>resend it with a new message_id</small>"]):::bad
-    V -- "yes" --> A(["<b>ACK</b>"]):::ok
-    A --> B{"Can it be<br/>fulfilled?"}
-    B -- "yes" --> CB["<b>Callback with the result</b><br/><small>on_select, on_init, ...</small>"]:::ok
-    B -- "no" --> CE["<b>Callback with an error</b><br/><small>for example on_select with<br/>a domain error code</small>"]:::warn
-    A -. "no callback within ttl" .-> T["<b>Timed out</b><br/><small>on the sender's side</small>"]:::warn
-    classDef ok fill:#22c55e1f,stroke:#22c55e,stroke-width:1.5px
-    classDef bad fill:#ef44441f,stroke:#ef4444,stroke-width:1.5px
-    classDef warn fill:#f59e0b1a,stroke:#f59e0b,stroke-width:1.5px
-```
-
-See [Core Error Codes](/developer-guide/docs/error-codes) for the error codes.
-
-### Start your ONDC journey
-
-Sign up or sign in on the [ONDC Portal](https://portal.ondc.org) to register as a Network Participant and begin your ONDC journey.
-
-### Subscription Process
-
-To enroll in the ONDC network, Network Participants (NP) must be added to the registry. The steps for an NP to onboard onto the ONDC Registry (Pre-Production, Production) are outlined as follows:
-
-#### 1. Pre-Production Registry
-- Obtain whitelisting for the subscriber ID.
-- NP Portal invokes Admin APIs
-- Keys are not validated upfront
-- Direct subscription allowed
-- DNS TXT record NOT required
-
-#### 2. Production Registry
-Participants will have to:
-1. Generate DNS TXT record
-2. Host DNS record
-3. Portal will call admin subscription API
-
-> **Note:** Steps involving DNS TXT record apply only to the Production environment. Pre-Production supports direct subscription without DNS validation.
-
-```mermaid
-flowchart TD
-    A["<b>1 · Generate key pairs</b><br/><small>Ed25519 for signing, X25519 for encryption</small>"] --> B["<b>2 · Sign up on the ONDC Portal</b><br/><small>subscriber details and public keys</small>"]
-    B --> C{"Which registry?"}
-    C -- "Pre-Production" --> P1
-    C -- "Production" --> Q1
-    subgraph PRE["<b>Pre-Production</b>"]
-        P1["Subscriber ID whitelisted"] --> P2["Portal calls the admin APIs<br/><small>direct subscription, no DNS TXT record</small>"]
-    end
-    subgraph PROD["<b>Production</b>"]
-        Q1["Generate a DNS TXT record"] --> Q2["Host it on your domain"] --> Q3["Portal calls the admin<br/>subscription API"]
-    end
-    P2 --> D[("<b>Listed in the Registry</b><br/><small>other apps can look you up</small>")]:::reg
-    Q3 --> D
-    style PRE fill:#0081cc0f,stroke:#0081cc,stroke-width:1.5px
-    style PROD fill:#22c55e0f,stroke:#22c55e,stroke-width:1.5px
-    classDef reg fill:#8b5cf61a,stroke:#8b5cf6,stroke-width:1.5px
-```
-
-### Signing and Verification
-
-When communicating over HTTP using Beckn APIs, the subscribers need to authenticate themselves to perform transactions with other subscribers. Due to the commercial nature of the transactions, every request/callback pair is considered to be a "contract" between two parties. Therefore, it is imperative that all requests and callbacks are digitally signed by the sender and subsequently verified by the receiver.
-
-How every request is signed and checked:
-
-```mermaid
-sequenceDiagram
-    participant S as Sender (BAP or BPP)
-    participant R as Registry
-    participant V as Receiver
-    S->>S: Hash the body (BLAKE-512) and sign created, expires, digest (Ed25519 private key)
-    S->>V: Request + Authorization header (keyId = subscriber_id|unique_key_id|ed25519)
-    V->>R: lookup (subscriber_id, unique_key_id), or use cached key
-    R-->>V: Sender's signing public key
-    V->>V: Rebuild the signing string from the received body and verify the signature
-    alt Signature valid and not expired
-        V-->>S: ACK
-    else Invalid or expired
-        V-->>S: NACK (invalid signature)
-    end
-```
-
-Use the [Signing & Verification](/developer-guide/auth-tools) tab to create and verify headers, with the header format and reference code.
-
----
-
-## Terminology
-
-| Term | Definition |
-| ---- | ---------- |
-| **Beckn Protocol** | Open-source, decentralized commerce protocol providing core specifications, message formats, and transaction APIs. |
-| **ONDC Network Extension Layer** | Domain-specific API contracts, policies, and network rules configured on top of the Beckn Protocol base layer. |
-| **Network Participant (NP)** | Any registered entity (buyer application, seller application, or gateway) on the ONDC network. |
-| **Registry** | Central trust repository storing participant metadata, public keys, subscriber IDs, and callback URLs. |
-| **Pre-Production Registry** | Testing and staging registry environment allowing direct subscription without DNS ownership validation. |
-| **Production Registry** | Live registry environment that requires DNS TXT record verification and portal administration to enroll participants. |
-| **Subscriber ID** | Unique FQDN-based identifier assigned to an NP to identify its transactions on the network. |
-| **DNS TXT Record** | Domain Name System text record hosted on the participant's domain to verify ownership during production onboarding. |
-| **Signing and Verification** | Cryptographic authentication where HTTP requests and callbacks are digitally signed by the sender and validated by the receiver. |
-| **Subscriber** | A registered network participant authorized to transact on the ONDC network using verified keys and endpoints. |
+For every API endpoint and its payload, see [API Reference](/developer-guide/docs/api-reference). For what happens when a call cannot be accepted or fulfilled, see **ACK / NACK**.

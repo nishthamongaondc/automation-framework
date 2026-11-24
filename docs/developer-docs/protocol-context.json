@@ -1,0 +1,5 @@
+{
+  "label": "Context",
+  "short_description": "The context object that envelopes every ONDC request and callback, and the fields it carries.",
+  "group": "Protocol"
+}

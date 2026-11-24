@@ -1,0 +1,6 @@
+{
+  "label": "Workbench",
+  "short_description": "The ONDC integration test bench where Network Participants run protocol flows, generate logs, and validate for certification before going live.",
+  "group": "ONDC Infra",
+  "subgroup": "Shared Infra"
+}

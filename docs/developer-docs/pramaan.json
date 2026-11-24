@@ -1,0 +1,6 @@
+{
+  "label": "Pramaan",
+  "short_description": "ONDC's automation tool for validating buyer and seller apps through automated checks and simulated scenarios, producing logs used for certification.",
+  "group": "ONDC Infra",
+  "subgroup": "Shared Infra"
+}

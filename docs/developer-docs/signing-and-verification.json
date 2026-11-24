@@ -1,0 +1,5 @@
+{
+  "label": "Signing & Verification",
+  "short_description": "How ONDC signs and verifies requests",
+  "group": "ONDC Security"
+}

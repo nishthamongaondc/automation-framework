@@ -1,0 +1,5 @@
+{
+  "label": "Message & Transaction ID",
+  "short_description": "How transaction_id and message_id differ, and how each behaves across the lifecycle of a transaction.",
+  "group": "Protocol"
+}

@@ -1,5 +1,6 @@
 {
   "label": "FAQs",
   "short_description": "Common ONDC FAQs",
-  "description": ""
+  "description": "",
+  "group": "Reference"
 }

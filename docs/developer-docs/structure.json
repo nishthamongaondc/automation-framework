@@ -1,0 +1,67 @@
+{
+  "version": 1,
+  "groups": [
+    {
+      "label": "About ONDC",
+      "pages": [
+        "about-ondc",
+        "key-concepts",
+        "how-ondc-works",
+        "roles-and-participants"
+      ]
+    },
+    {
+      "label": "Protocol",
+      "pages": [
+        "protocol-context",
+        "protocol-message-ids",
+        "protocol-api-calls",
+        "protocol-ack-nack",
+        "protocol-subscription"
+      ]
+    },
+    {
+      "label": "ONDC Infra",
+      "subgroups": [
+        {
+          "label": "Shared Infra",
+          "pages": [
+            "workbench",
+            "pramaan",
+            "mock-servers"
+          ]
+        },
+        {
+          "label": "Core Infra",
+          "pages": [
+            "registry",
+            "gateway",
+            "network-observability"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "ONDC Security",
+      "pages": [
+        "signing-and-verification"
+      ]
+    },
+    {
+      "label": "Tools & SDK",
+      "pages": [
+        "auth-tool-playground",
+        "sdks-and-utilities"
+      ]
+    },
+    {
+      "label": "Reference",
+      "pages": [
+        "api-reference",
+        "error-codes",
+        "city-state-codes",
+        "ondc-FAQs"
+      ]
+    }
+  ]
+}
