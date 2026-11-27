@@ -27,8 +27,6 @@
           "label": "Shared Infra",
           "pages": [
             "workbench",
-            "pramaan",
-            "mock-servers",
             "network-observability"
           ]
         },

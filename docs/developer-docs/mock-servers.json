@@ -1,6 +1,0 @@
-{
-  "label": "Mock Servers",
-  "short_description": "Reference mock BAP/BPP servers that let a Network Participant test ONDC flows and error scenarios without a live counterparty.",
-  "group": "ONDC Infra",
-  "subgroup": "Shared Infra"
-}
