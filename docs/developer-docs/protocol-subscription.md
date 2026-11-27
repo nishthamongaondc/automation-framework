@@ -31,10 +31,10 @@ flowchart TD
     B --> C{"Which registry?"}
     C -- "Pre-Production" --> P1
     C -- "Production" --> Q1
-    subgraph PRE["<b>Pre-Production</b>"]
+    subgraph PRE[Pre-Production]
         P1["Subscriber ID whitelisted"] --> P2["Portal calls the admin APIs<br/><small>direct subscription, no DNS TXT record</small>"]
     end
-    subgraph PROD["<b>Production</b>"]
+    subgraph PROD[Production]
         Q1["Generate a DNS TXT record"] --> Q2["Host it on your domain"] --> Q3["Portal calls the admin<br/>subscription API"]
     end
     P2 --> D[("<b>Listed in the Registry</b><br/><small>other apps can look you up</small>")]:::reg
