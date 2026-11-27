@@ -17,15 +17,12 @@ Every participant on ONDC speaks one shared protocol, based on **Beckn**, the op
 
 ---
 
-## Glossary
+## Other terms & acronyms
+
+The core network roles (NP, BAP, BPP, Gateway, Registry) are defined in **Core building blocks** above. This is a quick reference for the remaining protocol terms you will meet across the guide.
 
 | Term | Definition |
 | --- | --- |
-| **BAP** | Beckn Application Platform — the buyer-side application |
-| **BPP** | Beckn Provider Platform — the seller-side application |
-| **BG** | Beckn Gateway — broadcasts search requests during discovery |
-| **NP** | Network Participant — any entity registered on the ONDC network |
-| **Registry** | Central lookup service storing NP metadata and public keys |
 | **Context** | Metadata envelope carried by every API request and callback |
 | **Transaction ID** | Unique identifier that ties together all API calls of one transaction |
 | **Message ID** | Unique identifier of one request and its callback (for example `search`–`on_search`); every unsolicited callback, such as `on_status`, has its own |
@@ -37,4 +34,3 @@ Every participant on ONDC speaks one shared protocol, based on **Beckn**, the op
 | **Ed25519** | Elliptic curve signing algorithm used to sign requests |
 | **X25519** | Elliptic curve algorithm used for encryption between NPs, where a use case requires it |
 | **Subscriber ID** | The FQDN-based unique identifier of a Network Participant |
-| **Beckn** | The open-source decentralized commerce protocol that ONDC is built on |
