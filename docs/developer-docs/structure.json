@@ -28,7 +28,8 @@
           "pages": [
             "workbench",
             "pramaan",
-            "mock-servers"
+            "mock-servers",
+            "network-observability"
           ]
         },
         {
@@ -36,7 +37,8 @@
           "pages": [
             "registry",
             "gateway",
-            "network-observability"
+            "gcr",
+            "payment-assurance"
           ]
         }
       ]

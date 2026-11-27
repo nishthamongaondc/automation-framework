@@ -2,5 +2,5 @@
   "label": "Network Observability",
   "short_description": "Network Observability (NO) — the policy-mandatory framework NPs push anonymised transaction logs into, from on_search onward, for network health and compliance.",
   "group": "ONDC Infra",
-  "subgroup": "Core Infra"
+  "subgroup": "Shared Infra"
 }

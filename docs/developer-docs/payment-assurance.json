@@ -1,0 +1,6 @@
+{
+  "label": "Payment Assurance (PA)",
+  "short_description": "Assurance that on-network transactions are settled per the agreed terms",
+  "group": "ONDC Infra",
+  "subgroup": "Core Infra"
+}

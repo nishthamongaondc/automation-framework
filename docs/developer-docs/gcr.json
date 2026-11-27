@@ -1,0 +1,6 @@
+{
+  "label": "GCR (Global Catalog Repository)",
+  "short_description": "ONDC's centralized catalog repository for network-wide discovery",
+  "group": "ONDC Infra",
+  "subgroup": "Core Infra"
+}
